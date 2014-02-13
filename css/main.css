@@ -1,0 +1,29 @@
+#loading {
+	display: none;
+}
+
+#titleCont, #controls {
+	width: 300px;
+	text-align: center;
+	margin: auto;
+}
+
+#image {
+	border: 1px solid black;
+	width: 1024px;
+	height: 768px;
+	margin: 25px auto 0 auto;
+}
+
+#cache {
+	border: 1px solid black;
+	width: 90%;
+	height: 200px;
+	margin: 100px auto 0 auto;
+}
+
+.imgur {
+	width: 135px;
+	height: 135px;
+	float: left;
+}
