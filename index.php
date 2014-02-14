@@ -23,7 +23,7 @@
 		</div>
 		
 		<?php foreach ($next as $image): ?>
-		<a target="_blank" href="http://i.imgur.com/<?php echo $image; ?>.jpg" ><img class="imgur" src="http://i.imgur.com/<?php echo $image; ?>.jpg" /><a/>
+		<a target="_blank" href="http://i.imgur.com/<?php echo $image; ?>.jpg" ><img class="imgur" src="/img/found/<?php echo $image; ?>.jpg" /><a/>
 		<?php endforeach; ?>
 
 	</body>

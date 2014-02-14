@@ -20,6 +20,10 @@ class ImgurGet {
 
 		$result = $this->browser->request($this->_baseUri . $string . '.jpg');
 
+		if ($this->validate($result)) {
+			$this->_saveImage($result, $string);
+		}
+
 		return $this->validate($result);
 	}
 
@@ -55,6 +59,12 @@ class ImgurGet {
 
 
 		return $this->_removedImage;
+	}
+
+	protected function _saveImage($image, $name) {
+		$path = realpath(dirname(__FILE__) . '/../img/found/');
+
+		file_put_contents($path . '/' . $name . '.jpg', $image);
 	}
 
 
