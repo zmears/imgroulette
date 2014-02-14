@@ -19,7 +19,7 @@
 
 	<body>
 		<div id="titleCont">
-			<h2>Random Imgur Images</h2>
+			<a href="/index.php"> <h2>Random Imgur Images</h2> </a>
 		</div>
 		
 		<?php foreach ($next as $image): ?>
