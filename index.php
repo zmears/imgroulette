@@ -14,7 +14,7 @@
 
 	include('classes/imgur.php');
 	$imgur = new Imgur;
-	$next = $imgur->next(60);
+	$next = $imgur->next(30);
 	?>
 
 	<body>
