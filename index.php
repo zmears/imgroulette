@@ -14,7 +14,12 @@
 
 	include('classes/imgur.php');
 	$imgur = new Imgur;
+
+	$start = microtime(true);
 	$next = $imgur->next(30);
+	$end = microtime(true);
+
+	$time = $end - $start;
 	?>
 
 	<body>
@@ -22,7 +27,8 @@
 			<a href="/index.php"> <h2>Random Imgur Images</h2> </a>
 			Total Guesses: <?php echo $imgur->iterations; ?> <br />
 			Known Images: <?php echo $imgur->knownImages; ?> 
-			New Images: <?php echo $imgur->newImages; ?>
+			New Images: <?php echo $imgur->newImages; ?> <br />
+			Total Time: <?php echo round($time, 2); ?> seconds
 		</div>
 		
 		<?php foreach ($next as $image): ?>
