@@ -28,9 +28,11 @@ class ImgurGet {
 	}
 
 	public function validate($image) {
+
 		$searchStrings = array(
 			'/www/imgur.com',
-			'<!doctype html>'
+			'<!doctype html>',
+			'<!DOCTYPE'
 		);
 
 		foreach ($searchStrings as $html) {
