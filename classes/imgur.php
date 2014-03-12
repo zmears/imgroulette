@@ -6,6 +6,9 @@ class Imgur {
 	protected $_db = null;
 	protected $_path = null;
 	public $debug = false;
+	public $iterations  = 0;
+	public $knownImages = 0;
+	public $newImages   = 0;
 
 
 	public function __construct() {
@@ -32,6 +35,7 @@ class Imgur {
 
 		while($iterations < 100) {
 			$iterations++;
+			$this->iterations++;
 
 			//Generate new string
 			$string = $this->getString();
@@ -44,6 +48,7 @@ class Imgur {
 			if ($existing = $this->checkKnown($string)) {
 				if ($this->debug) echo 'known string' . PHP_EOL;
 				if ($existing->valid) { //Valid? we can stop
+					$this->knownImages++;
 					if ($this->debug) echo 'valid string' . PHP_EOL;
 					break;
 				} else {
@@ -54,6 +59,7 @@ class Imgur {
 				//Get the image
 				if ($this->debug) echo 'Checking image '  . PHP_EOL;
 				if ($this->imgurGet->getImage($string)) {
+					$this->newImages++;
 					 if ($this->debug) echo 'valid image '. PHP_EOL;
 					return $string;
 				} else { //Cant get the image? Invalid string

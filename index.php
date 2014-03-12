@@ -20,6 +20,9 @@
 	<body>
 		<div id="titleCont">
 			<a href="/index.php"> <h2>Random Imgur Images</h2> </a>
+			Total Guesses: <?php echo $imgur->iterations; ?> <br />
+			Known Images: <?php echo $imgur->knownImages; ?> 
+			New Images: <?php echo $imgur->newImages; ?>
 		</div>
 		
 		<?php foreach ($next as $image): ?>
