@@ -69,6 +69,12 @@ class ImgurGet {
 		file_put_contents($path . '/' . $name . '.jpg', $image);
 	}
 
+	public function haveImage($name) {
+		$path = realpath(dirname(__FILE__) . '/../img/found/');
+		
+		return file_exists($path . '/' . $name . '.jpg');
+	}
+
 
 
 }

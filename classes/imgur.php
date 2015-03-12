@@ -28,6 +28,13 @@ class Imgur {
 		return $images;
 	}
 
+	public function getTypes() {
+		$sql = 'SELECT * FROM type ORDER BY id ASC';
+
+		return $this->getDb()->query($sql)->fetchAll();
+
+	}
+
 
 	public function getImage() {
 
@@ -40,7 +47,7 @@ class Imgur {
 			//Generate new string
 			$string = $this->getString();
 
-			// $string = 'w7x0nt';
+			// $string = 'fFoOL';
 
 			if ($this->debug) echo $string . PHP_EOL;
 			
@@ -55,11 +62,16 @@ class Imgur {
 					if ($this->debug) echo 'invalid string' . PHP_EOL;
 					continue;
 				}
+			} elseif ($this->imgurGet->haveImage($string)) {
+				$this->saveImage($string, 1);
+				$this->knownImages++;
 			} else {
+
 				//Get the image
 				if ($this->debug) echo 'Checking image '  . PHP_EOL;
 				if ($this->imgurGet->getImage($string)) {
 					$this->newImages++;
+					$this->saveImage($string, 1);
 					 if ($this->debug) echo 'valid image '. PHP_EOL;
 					return $string;
 				} else { //Cant get the image? Invalid string
@@ -105,9 +117,19 @@ class Imgur {
 		return $stmt->execute();
 	}
 
+	public function updateImage($string, $valid) {
+		$sql = "UPDATE known SET valid = '$valid' WHERE uri = '$string'";
+
+
+		return $this->getDb()->exec($sql);
+	}
+
 	public function checkKnown($string) {
 
+
+
 		$sql  = "SELECT * FROM known WHERE uri =  '{$string}'";
+
 
 		return $this->getDb()->query($sql)->fetchObject();
 	}
@@ -120,6 +142,7 @@ class Imgur {
 		$result = $this->getDb()->exec($dbSetup);
 
 		$this->getDb()->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		$this->getDb()->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
 	}
 
 
