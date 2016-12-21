@@ -17,6 +17,7 @@ class ImgurGet {
 
 
 	public function getImage($string) {
+		// usleep(500000);
 
 		$result = $this->browser->request($this->_baseUri . $string . '.jpg');
 

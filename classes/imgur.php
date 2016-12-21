@@ -32,16 +32,13 @@ class Imgur {
 		$sql = 'SELECT * FROM type ORDER BY id ASC';
 
 		return $this->getDb()->query($sql)->fetchAll();
-
 	}
-
 
 	public function getImage() {
 
-		$iterations = 0;
+		$iterations = 100;
 
-		while($iterations < 100) {
-			$iterations++;
+		while($iterations--) {
 			$this->iterations++;
 
 			//Generate new string
@@ -49,46 +46,44 @@ class Imgur {
 
 			// $string = 'fFoOL';
 
-			if ($this->debug) echo $string . PHP_EOL;
+			$this->consoleLog('Checking Image: ' . $string);
 			
 			//Search for existing record of string
 			if ($existing = $this->checkKnown($string)) {
-				if ($this->debug) echo 'known string' . PHP_EOL;
+				$this->consoleLog('Known String: ' . $string);
+				$this->consoleLog('String is:    ' . $existing->valid ? 'Valid' : 'Invalid');
+
 				if ($existing->valid) { //Valid? we can stop
 					$this->knownImages++;
-					if ($this->debug) echo 'valid string' . PHP_EOL;
-					break;
-				} else {
-					if ($this->debug) echo 'invalid string' . PHP_EOL;
-					continue;
-				}
-			} elseif ($this->imgurGet->haveImage($string)) {
-				$this->saveImage($string, 1);
-				$this->knownImages++;
-			} else {
-
-				//Get the image
-				if ($this->debug) echo 'Checking image '  . PHP_EOL;
-				if ($this->imgurGet->getImage($string)) {
-					$this->newImages++;
-					$this->saveImage($string, 1);
-					 if ($this->debug) echo 'valid image '. PHP_EOL;
 					return $string;
-				} else { //Cant get the image? Invalid string
-					if ($this->debug) echo 'invalid image ' . PHP_EOL;
-					$this->saveImage($string, 0);
 				}
+
+				continue; //Image id is invalid
 			}
 
-			echo PHP_EOL . PHP_EOL;
+			if ($this->imgurGet->haveImage($string)) {
+				$this->consoleLog('Found Image On Drive');
+				$this->saveImage($string, 1);
+				$this->knownImages++;
+
+				return $string;
+			}
+
+			//Get the image
+			$this->consoleLog('Getting Image:  ' . $string);
+			if ($this->imgurGet->getImage($string)) {
+				$this->consoleLog('Got Valid Image', true);
+				$this->newImages++;
+				$this->saveImage($string, 1);
+				return $string;
+			} else { //Cant get the image? Invalid string
+				$this->consoleLog('Invalid Image', true);
+				$this->saveImage($string, 0);
+			}
 
 		}
 
-		
-
-		return $string;
 	}
-
 
 
 	public function getString() {
@@ -125,11 +120,7 @@ class Imgur {
 	}
 
 	public function checkKnown($string) {
-
-
-
-		$sql  = "SELECT * FROM known WHERE uri =  '{$string}'";
-
+		$sql  = "SELECT * FROM known WHERE uri = '{$string}'";
 
 		return $this->getDb()->query($sql)->fetchObject();
 	}
@@ -151,7 +142,6 @@ class Imgur {
 			return $this->_db;
 		}
 
-
 		$path = realpath(dirname(__FILE__) . '/../db/imgur.sqlite');
 
 		$this->_db = new PDO('sqlite:' . $path);
@@ -161,6 +151,14 @@ class Imgur {
 		}
 
 		return $this->_db;
+	}
+
+	public function consoleLog($string, $end = false)
+	{
+		if ($this->debug) {
+			echo $string . PHP_EOL . ($end ? PHP_EOL : '');
+
+		}		
 	}
 
 }
